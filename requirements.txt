@@ -1,11 +1,11 @@
-opencv-python-headless==4.9.0.80  # Headless build suited for Streamlit Cloud / Render
-mediapipe>=0.10.11,<0.11.0        # Pose estimation (relaxed for compatibility on Render)
-numpy==1.26.4                     # Numerical computing
-yt-dlp==2024.07.16               # (Optional) video downloading
-streamlit==1.36.0                # Web UI
-matplotlib==3.8.4               # Charting
-jinja2==3.1.4                   # Templating
-pdfkit==1.0.0                   # PDF generation (requires wkhtmltopdf, may be unavailable)
-Pillow==10.3.0                  # Image processing fallback
-protobuf==4.25.3                # Mediapipe dependency pin
-packaging==24.1                 # Version parsing (sometimes required)
+opencv-python-headless>=4.8.0,<5.0.0  # Headless build for cloud deployment
+mediapipe>=0.10.0,<0.11.0          # Pose estimation - relaxed for Python 3.13 compatibility  
+numpy>=1.24.0,<2.0.0               # Numerical computing - flexible for Python 3.13
+yt-dlp>=2024.07.0                  # (Optional) video downloading
+streamlit>=1.35.0,<2.0.0           # Web UI - flexible version
+matplotlib>=3.7.0,<4.0.0           # Charting - flexible version
+jinja2>=3.1.0,<4.0.0              # Templating - flexible version
+pdfkit>=1.0.0                     # PDF generation (requires wkhtmltopdf, may be unavailable)
+Pillow>=10.0.0,<11.0.0            # Image processing fallback
+protobuf>=4.21.0,<5.0.0           # Mediapipe dependency - flexible for compatibility
+packaging>=23.0                   # Version parsing (sometimes required)

@@ -1,0 +1,1 @@
+python_version = "3.12"  # Pin to Python 3.12 for Streamlit Cloud compatibility
