@@ -1,0 +1,8 @@
+opencv-python
+mediapipe
+numpy
+yt-dlp
+streamlit
+matplotlib
+jinja2
+pdfkit
