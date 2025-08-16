@@ -143,7 +143,9 @@ PERFORMANCE_CONFIG = {
 # ===============================
 REPORT_CONFIG = {
     "generate_html": True,
-    "generate_pdf": True,  # PDF generation enabled
+    # PDF generation disabled by default for Streamlit Cloud (wkhtmltopdf not available)
+    # Set environment variable ENABLE_PDF_REPORTS=true to enable (requires wkhtmltopdf)
+    "generate_pdf": os.getenv("ENABLE_PDF_REPORTS", "false").lower() == "true",
     "include_charts": True,
     "include_frame_samples": True,
     "template_file": "report_template.html"

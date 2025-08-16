@@ -76,6 +76,36 @@ streamlit run streamlit_app.py
 4. **Access the web interface**
 ```
 Open your browser to http://localhost:8501
+
+## ☁️ Deployment (Streamlit Cloud)
+
+1. Push this repository to GitHub (already done).
+2. Go to https://share.streamlit.io/ and create a new app.
+3. Select the repo and set the main file path to `streamlit_app.py`.
+4. (Optional) Set environment variables:
+  - `ENABLE_PDF_REPORTS=true` (only if wkhtmltopdf is available—normally NOT on Streamlit Cloud)
+5. Click Deploy.
+
+### Streamlit Cloud Notes
+| Concern | Action |
+|---------|--------|
+| OpenCV GUI dependencies | Using `opencv-python-headless` |
+| PDF generation | Disabled by default (needs wkhtmltopdf) |
+| Large videos | Keep uploads < 200MB (Streamlit limit) |
+| Disk persistence | `streamlit_output/` not persisted between restarts |
+| Performance | Lower FPS vs local; auto-optimization still applies |
+
+### Customizing Resource Use
+- Reduce `VIDEO_CONFIG['resize_width']` in `config.py` for faster inference.
+- Increase `skip_frames` to process fewer frames.
+- Disable charts by setting `SMOOTHNESS_CONFIG['export_charts']=False`.
+
+### Enabling PDF Reports (Optional / Advanced)
+If you control the environment (e.g., a Docker deploy) install wkhtmltopdf and set:
+```
+ENABLE_PDF_REPORTS=true
+```
+Otherwise the app will skip PDF generation gracefully.
 ```
 
 ## 📋 Dependencies

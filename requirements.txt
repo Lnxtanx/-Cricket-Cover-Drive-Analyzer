@@ -1,8 +1,11 @@
-opencv-python
-mediapipe
-numpy
-yt-dlp
-streamlit
-matplotlib
-jinja2
-pdfkit
+opencv-python-headless==4.9.0.80  # Headless build suited for Streamlit Cloud
+mediapipe==0.10.11                # Pose estimation
+numpy==1.26.4                     # Numerical computing
+yt-dlp==2024.07.16               # (Optional) video downloading
+streamlit==1.36.0                # Web UI
+matplotlib==3.8.4               # Charting
+jinja2==3.1.4                   # Templating
+pdfkit==1.0.0                   # PDF generation (requires wkhtmltopdf, may be unavailable)
+Pillow==10.3.0                  # Image processing fallback
+protobuf==4.25.3                # Mediapipe dependency pin
+packaging==24.1                 # Version parsing (sometimes required)
