@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: cricket-cover-drive-analyzer
+    runtime: python
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.13
+      - key: ENABLE_PDF_REPORTS
+        value: "false"
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
+    autoDeploy: true
+    plan: free
+    healthCheckPath: /

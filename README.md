@@ -610,3 +610,17 @@ for video_file in os.listdir(video_dir):
 ---
 
 **Built with ❤️ for cricket enthusiasts and players worldwide** 🏏
+
+### Render Deployment Python Version
+Render ignores `runtime.txt` for native Python runtime. We pin Python 3.10.13 via `render.yaml` using an `envVars` entry:
+
+```
+services:
+  - type: web
+    runtime: python
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.13
+```
+
+If Render still defaults to a newer Python, set the environment variable manually in the dashboard or switch to a Dockerfile with an explicit base image.
