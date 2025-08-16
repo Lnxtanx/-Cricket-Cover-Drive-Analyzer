@@ -1,5 +1,5 @@
-opencv-python-headless==4.9.0.80  # Headless build suited for Streamlit Cloud
-mediapipe==0.10.11                # Pose estimation
+opencv-python-headless==4.9.0.80  # Headless build suited for Streamlit Cloud / Render
+mediapipe>=0.10.11,<0.11.0        # Pose estimation (relaxed for compatibility on Render)
 numpy==1.26.4                     # Numerical computing
 yt-dlp==2024.07.16               # (Optional) video downloading
 streamlit==1.36.0                # Web UI

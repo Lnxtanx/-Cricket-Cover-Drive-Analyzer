@@ -7,7 +7,7 @@ services:
     startCommand: "streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.6
+        value: 3.10.13
       - key: ENABLE_PDF_REPORTS
         value: "false"
       - key: STREAMLIT_SERVER_ENABLECORS
