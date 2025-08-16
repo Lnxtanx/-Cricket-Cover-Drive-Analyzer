@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: cricket-cover-drive-analyzer
+    plan: free
+    runtime: python
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.6
+      - key: ENABLE_PDF_REPORTS
+        value: "false"
+      - key: STREAMLIT_SERVER_ENABLECORS
+        value: "false"
+      - key: STREAMLIT_SERVER_ENABLEXsrfProtection
+        value: "false"
+    healthCheckPath: /
+    autoDeploy: true
+
+### Notes ###
+# 1. This native (non-Docker) service is the simplest path. Render provisions a Python runtime
+#    and runs the startCommand. Streamlit must bind to 0.0.0.0 and use the provided $PORT.
+# 2. Outputs written to the local filesystem are ephemeral across deploys. For persistence, mount a
+#    Render disk or push artifacts to object storage (S3, etc.).
+# 3. To enable PDF reports, you must install wkhtmltopdf in the build step (e.g., add an apt install
+#    command ahead of pip install) and set ENABLE_PDF_REPORTS=true.

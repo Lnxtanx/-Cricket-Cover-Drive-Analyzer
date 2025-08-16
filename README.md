@@ -108,7 +108,65 @@ ENABLE_PDF_REPORTS=true
 Otherwise the app will skip PDF generation gracefully.
 ```
 
-## 📋 Dependencies
+## �️ Deployment on Render
+
+You can deploy this Streamlit app to Render either via the provided `render.yaml` (Blueprint - native Python) or using the optional `Dockerfile`.
+
+### Option 1: Blueprint (Native Python) – Easiest
+1. Ensure `render.yaml` is committed at the repo root (already added).
+2. Push changes to GitHub.
+3. In Render dashboard: New > Blueprint > select this repository.
+4. Render parses `render.yaml` and creates the service.
+5. Click Deploy. First build installs dependencies then starts Streamlit.
+
+The app binds to `$PORT` automatically via the start command:
+```
+streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
+```
+
+### Option 2: Docker (Needed for PDF Reports / wkhtmltopdf)
+1. Uncomment the wkhtmltopdf lines in `Dockerfile` to enable PDF generation.
+2. In Render: New > Web Service > pick repo > choose Docker.
+3. (Optional) Set env var `ENABLE_PDF_REPORTS=true`.
+4. Deploy.
+
+### Environment Variables
+| Variable | Default | Description |
+|----------|---------|-------------|
+| ENABLE_PDF_REPORTS | false | Toggle PDF report generation (requires wkhtmltopdf in image) |
+| STREAMLIT_SERVER_ENABLECORS | false | Disable CORS to simplify embedding |
+| STREAMLIT_SERVER_ENABLEXsrfProtection | false | Disable XSRF protection (only if you understand the risk) |
+
+### Persistence
+Render's ephemeral filesystem resets on deploy. Outputs in `output/` or `streamlit_output/` vanish after redeploy. For persistence:
+1. Add a Render Disk and mount (e.g. `/data`).
+2. Update `PATHS['output_dir']` in `config.py` to point to `/data/output`.
+3. Or upload artifacts to S3 / cloud storage programmatically after generation.
+
+### Performance Tips
+- Lower `VIDEO_CONFIG['resize_width']` (e.g., 360) for faster inference.
+- Let auto optimization run (already enabled).
+- Avoid very large (>200MB) uploads on free tier (timeout risk).
+
+### Local Reproduction of Production Command
+```bash
+streamlit run streamlit_app.py --server.port 8501 --server.address 0.0.0.0
+```
+
+### Troubleshooting
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| 502 on first load | Still building / starting | Wait & watch logs |
+| Module not found | Missing dependency | Add to `requirements.txt` & redeploy |
+| PDF not generated | wkhtmltopdf absent | Use Docker option & set env var |
+| Slow processing | High resolution / large video | Reduce resolution / increase skipping |
+| Memory errors | Very large video | Use shorter clip or upgrade plan |
+
+### Security Note
+Only disable XSRF and CORS if app isn't handling sensitive user data. For multi-user authenticated scenarios, re-enable protections.
+
+
+## �📋 Dependencies
 
 ```text
 opencv-python      # Computer vision processing

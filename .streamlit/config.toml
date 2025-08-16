@@ -1,0 +1,17 @@
+[server]
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+address = "0.0.0.0"
+# The actual port is injected via the start command (streamlit --server.port $PORT)
+port = 8501
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#2c5530"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#e8f5e8"
+textColor = "#2c5530"
+font = "sans serif"
