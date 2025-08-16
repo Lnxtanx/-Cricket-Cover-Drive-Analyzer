@@ -624,3 +624,24 @@ services:
 ```
 
 If Render still defaults to a newer Python, set the environment variable manually in the dashboard or switch to a Dockerfile with an explicit base image.
+
+## 🐳 Docker Deployment (Recommended if Render ignores Python version)
+
+A `Dockerfile` is included to force Python 3.10.13 and ensure `mediapipe` installs.
+
+Build & run locally:
+```bash
+docker build -t cover-drive-analyzer .
+docker run -p 8501:8501 cover-drive-analyzer
+```
+
+On Render:
+1. New > Web Service > Select repo
+2. Choose Docker as runtime
+3. Leave start command blank (Docker CMD handles it)
+4. Deploy
+
+To enable PDF reports, uncomment wkhtmltopdf lines in `Dockerfile` and set env var:
+```
+ENABLE_PDF_REPORTS=true
+```
