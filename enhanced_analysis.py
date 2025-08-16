@@ -980,113 +980,106 @@ def annotate_frame_enhanced(frame, results, metrics, bat_info, frame_number):
             end_x = int(center[0] + length * math.cos(angle_rad))
             end_y = int(center[1] + length * math.sin(angle_rad))
             cv2.line(frame, center, (end_x, end_y), (255, 0, 255), 3)
-            
-            # Bat info text
-            cv2.putText(frame, f"Bat: {bat['angle']:.1f}°", (center[0] + 10, center[1] - 10), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
     
     # Get frame dimensions for responsive positioning
     frame_height, frame_width = frame.shape[:2]
     
-    # === LEFT SIDE METRICS (Clear spacing) ===
-    left_x = 15
-    y_start = 30
-    y_spacing = 22
-    font_scale = 0.55
-    thickness = 2
-    
-    # Background rectangles for better text visibility
-    overlay = frame.copy()
-    
-    # Frame info with performance indicator
-    y_pos = y_start
-    cv2.rectangle(overlay, (left_x-5, y_pos-18), (left_x+250, y_pos+5), (0, 0, 0), -1)
-    perf_indicator = "🟢" if len(bat_info) > 0 else "🔴"
-    cv2.putText(frame, f"Frame: {frame_number} {perf_indicator}", (left_x, y_pos), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (255, 255, 255), thickness)
-    y_pos += y_spacing
-    
-    # Only show cricket metrics if we have pose data
+    # === TEXT BOXES LAYOUT - ONE BOTTOM, ONE MIDDLE ===
     if results and results.pose_landmarks and metrics:
-        # Key cricket angles with color coding
+        # Box dimensions and positioning
+        box_height = 80
+        box_margin = 10
+        box_width = 200
+        
+        # Bottom box position (left side)
+        bottom_box_x = box_margin
+        bottom_box_y = frame_height - box_height - box_margin
+        
+        # Middle box position (right side, vertically centered)
+        middle_box_x = frame_width - box_width - box_margin
+        middle_box_y = (frame_height - box_height) // 2
+        
+        # Draw background boxes with semi-transparent overlay
+        overlay = frame.copy()
+        
+        # Bottom box - Angle Measurements
+        cv2.rectangle(overlay, (bottom_box_x, bottom_box_y), (bottom_box_x + box_width, frame_height - box_margin), (0, 0, 0), -1)
+        cv2.rectangle(frame, (bottom_box_x, bottom_box_y), (bottom_box_x + box_width, frame_height - box_margin), (255, 255, 255), 2)
+        
+        # Middle box - Position Feedback
+        cv2.rectangle(overlay, (middle_box_x, middle_box_y), (middle_box_x + box_width, middle_box_y + box_height), (0, 0, 0), -1)
+        cv2.rectangle(frame, (middle_box_x, middle_box_y), (middle_box_x + box_width, middle_box_y + box_height), (255, 255, 255), 2)
+        
+        # Blend overlay for semi-transparent background
+        cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
+        
+        # === BOTTOM BOX - ANGLE MEASUREMENTS ===
+        font_scale = 0.45
+        thickness = 1
+        line_height = 16
+        bottom_text_start_y = bottom_box_y + 18
+        
+        # Box title
+        cv2.putText(frame, "ANGLES", (bottom_box_x + 5, bottom_text_start_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        
+        # Angle measurements with color coding
         front_elbow = metrics.get('front_elbow_angle', 0)
         elbow_color = (0, 255, 0) if 120 <= front_elbow <= 160 else (0, 165, 255) if front_elbow > 100 else (0, 0, 255)
-        cv2.rectangle(overlay, (left_x-5, y_pos-18), (left_x+250, y_pos+5), (0, 0, 0), -1)
-        cv2.putText(frame, f"Front Elbow: {front_elbow:.1f}°", (left_x, y_pos), cv2.FONT_HERSHEY_SIMPLEX, font_scale, elbow_color, thickness)
-        y_pos += y_spacing
-        
-        spine_lean = metrics.get('spine_lean', 0)
-        spine_color = (0, 255, 0) if spine_lean <= 10 else (0, 165, 255) if spine_lean <= 20 else (0, 0, 255)
-        cv2.rectangle(overlay, (left_x-5, y_pos-18), (left_x+250, y_pos+5), (0, 0, 0), -1)
-        cv2.putText(frame, f"Spine Lean: {spine_lean:.1f}°", (left_x, y_pos), cv2.FONT_HERSHEY_SIMPLEX, font_scale, spine_color, thickness)
-        y_pos += y_spacing
+        cv2.putText(frame, f"Elbow: {front_elbow:.1f}°", (bottom_box_x + 5, bottom_text_start_y + line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, elbow_color, thickness)
         
         knee_bend = metrics.get('front_knee_bend', 0)
         knee_color = (0, 255, 0) if 140 <= knee_bend <= 170 else (0, 165, 255)
-        cv2.rectangle(overlay, (left_x-5, y_pos-18), (left_x+250, y_pos+5), (0, 0, 0), -1)
-        cv2.putText(frame, f"Knee Bend: {knee_bend:.1f}°", (left_x, y_pos), cv2.FONT_HERSHEY_SIMPLEX, font_scale, knee_color, thickness)
-        y_pos += y_spacing
+        cv2.putText(frame, f"Knee: {knee_bend:.1f}°", (bottom_box_x + 5, bottom_text_start_y + 2*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, knee_color, thickness)
+        
+        spine_lean = metrics.get('spine_lean', 0)
+        spine_color = (0, 255, 0) if spine_lean <= 10 else (0, 165, 255) if spine_lean <= 20 else (0, 0, 255)
+        cv2.putText(frame, f"Spine: {spine_lean:.1f}°", (bottom_box_x + 5, bottom_text_start_y + 3*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, spine_color, thickness)
         
         wrist_vel = metrics.get('wrist_velocity', 0)
         vel_color = (0, 255, 0) if wrist_vel > 20 else (255, 255, 0)
-        cv2.rectangle(overlay, (left_x-5, y_pos-18), (left_x+280, y_pos+5), (0, 0, 0), -1)
-        cv2.putText(frame, f"Wrist Velocity: {wrist_vel:.1f}", (left_x, y_pos), cv2.FONT_HERSHEY_SIMPLEX, font_scale, vel_color, thickness)
-        y_pos += y_spacing
+        cv2.putText(frame, f"Wrist: {wrist_vel:.1f}px/s", (bottom_box_x + 110, bottom_text_start_y + line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, vel_color, thickness)
+        
+        # === MIDDLE BOX - POSITION FEEDBACK ===
+        middle_text_start_y = middle_box_y + 18
+        cv2.putText(frame, "POSITION", (middle_box_x + 5, middle_text_start_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
         
         head_knee_align = metrics.get('head_knee_alignment', 0)
-        head_color = (0, 255, 0) if head_knee_align <= 30 else (0, 165, 255) if head_knee_align <= 50 else (0, 0, 255)
-        cv2.rectangle(overlay, (left_x-5, y_pos-18), (left_x+280, y_pos+5), (0, 0, 0), -1)
-        cv2.putText(frame, f"Head-Knee Dist: {head_knee_align:.1f}", (left_x, y_pos), cv2.FONT_HERSHEY_SIMPLEX, font_scale, head_color, thickness)
-    
-    # Blend overlay for semi-transparent background
-    cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
-    
-    # === RIGHT SIDE FEEDBACK (Clear positioning) ===
-    if results and results.pose_landmarks and metrics:
-        feedback_x = frame_width - 220
-        feedback_y = 35
-        feedback_spacing = 30
-        feedback_font = 0.65
-        feedback_thickness = 2
         
-        front_elbow = metrics.get('front_elbow_angle', 0)
-        spine_lean = metrics.get('spine_lean', 0)
-        head_knee_align = metrics.get('head_knee_alignment', 0)
-        
-        # Cricket feedback
+        # Elbow position feedback
         if front_elbow < 100:
-            cv2.putText(frame, "❌ Low elbow", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 0, 255), feedback_thickness)
+            cv2.putText(frame, "✗ Low elbow", (middle_box_x + 5, middle_text_start_y + line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 255), thickness)
         elif front_elbow > 160:
-            cv2.putText(frame, "⚠️ High elbow", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 165, 255), feedback_thickness)
+            cv2.putText(frame, "! High elbow", (middle_box_x + 5, middle_text_start_y + line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 165, 255), thickness)
         else:
-            cv2.putText(frame, "✅ Good elbow", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 255, 0), feedback_thickness)
-        feedback_y += feedback_spacing
+            cv2.putText(frame, "✓ Good elbow", (middle_box_x + 5, middle_text_start_y + line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), thickness)
         
+        # Head position feedback
         if head_knee_align > 50:
-            cv2.putText(frame, "❌ Head alignment", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 0, 255), feedback_thickness)
+            cv2.putText(frame, "✗ Head position", (middle_box_x + 5, middle_text_start_y + 2*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 255), thickness)
         elif head_knee_align > 30:
-            cv2.putText(frame, "⚠️ Head position", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 165, 255), feedback_thickness)
+            cv2.putText(frame, "! Head position", (middle_box_x + 5, middle_text_start_y + 2*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 165, 255), thickness)
         else:
-            cv2.putText(frame, "✅ Head positioned", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 255, 0), feedback_thickness)
-        feedback_y += feedback_spacing
+            cv2.putText(frame, "✓ Head positioned", (middle_box_x + 5, middle_text_start_y + 2*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), thickness)
         
+        # Balance feedback
         if spine_lean > 20:
-            cv2.putText(frame, "❌ Too much lean", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 0, 255), feedback_thickness)
+            cv2.putText(frame, "✗ Balance", (middle_box_x + 5, middle_text_start_y + 3*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 0, 255), thickness)
         elif spine_lean > 10:
-            cv2.putText(frame, "⚠️ Slight lean", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 165, 255), feedback_thickness)
+            cv2.putText(frame, "! Balance", (middle_box_x + 5, middle_text_start_y + 3*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 165, 255), thickness)
         else:
-            cv2.putText(frame, "✅ Good balance", (feedback_x, feedback_y), cv2.FONT_HERSHEY_SIMPLEX, feedback_font, (0, 255, 0), feedback_thickness)
+            cv2.putText(frame, "✓ Good balance", (middle_box_x + 5, middle_text_start_y + 3*line_height), cv2.FONT_HERSHEY_SIMPLEX, font_scale, (0, 255, 0), thickness)
     
     # === BAT DETECTION STATUS (Top center) ===
     if bat_info:
-        bat_status_x = frame_width // 2 - 80
-        cv2.rectangle(frame, (bat_status_x-10, 5), (bat_status_x+160, 30), (0, 100, 0), -1)
-        cv2.putText(frame, "🏏 BAT DETECTED", (bat_status_x, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        bat_status_x = frame_width // 2 - 60
+        cv2.rectangle(frame, (bat_status_x-5, 5), (bat_status_x+120, 25), (0, 100, 0), -1)
+        cv2.putText(frame, "BAT DETECTED", (bat_status_x, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
     
-    # === BOTTOM PERFORMANCE INFO ===
-    bottom_y = frame_height - 25
-    cv2.rectangle(frame, (10, bottom_y-20), (frame_width-10, frame_height-5), (0, 0, 0), -1)
-    status_text = f"🎯 Real-time Analysis | Bat Tracking: {'ON' if bat_info else 'OFF'} | Frame: {frame_number}"
-    cv2.putText(frame, status_text, (15, bottom_y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (255, 255, 0), 1)
+    # === BOTTOM STATUS BAR (Simplified) ===
+    bottom_y = frame_height - 5
+    cv2.rectangle(frame, (5, bottom_y-15), (frame_width-5, frame_height-1), (40, 40, 40), -1)
+    status_text = f"Cricket Analysis | Frame: {frame_number}"
+    cv2.putText(frame, status_text, (10, bottom_y-3), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (200, 200, 200), 1)
     
     return frame
 
