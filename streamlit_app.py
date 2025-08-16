@@ -15,9 +15,16 @@ try:
     from report_generator import generate_reports
     ENHANCED_MODE = True
 except ImportError:
-    # Basic mode fallback - would need cover_drive_analysis_realtime module
-    ENHANCED_MODE = False
-    st.warning("⚠️ Running in basic mode. Install additional dependencies for enhanced features.")
+    try:
+        # Fallback to ultralytics version
+        from enhanced_analysis_ultralytics import analyze_video
+        from report_generator import generate_reports
+        ENHANCED_MODE = True
+        st.info("🔄 Using Ultralytics YOLO pose estimation (MediaPipe fallback)")
+    except ImportError:
+        # Basic mode fallback
+        ENHANCED_MODE = False
+        st.warning("⚠️ Running in basic mode. Some features may be limited.")
 
 # ===============================
 # Streamlit Configuration
