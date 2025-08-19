@@ -1,9 +1,8 @@
 [server]
-headless = true
+headless = false
 enableCORS = false
 enableXsrfProtection = false
-address = "0.0.0.0"
-# The actual port is injected via the start command (streamlit --server.port $PORT)
+address = "localhost"
 port = 8501
 
 [browser]

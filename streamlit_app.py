@@ -25,66 +25,187 @@ except ImportError:
 st.set_page_config(
     page_title="Cricket Cover Drive Analyzer", 
     page_icon="🏏",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
+# Load CSS styles
+def load_css():
+    """Load custom CSS for modern website styling."""
+    css_file = Path(__file__).parent / "styles.css"
+    if css_file.exists():
+        with open(css_file, 'r', encoding='utf-8') as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    else:
+        # Fallback inline CSS if file doesn't exist
+        st.markdown("""
+        <style>
+        :root {
+            --primary-green: #2E8B57;
+            --accent-orange: #FF6B35;
+            --light-green: #98FB98;
+            --dark-green: #1F5F1F;
+            --white: #FFFFFF;
+        }
+        .stApp { background: linear-gradient(135deg, #FFF8DC 0%, #F8F9FA 100%); }
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        </style>
+        """, unsafe_allow_html=True)
+
+# Load CSS on app start
+load_css()
+
 # ===============================
-# Header Navigation
+# Modern Website Components
 # ===============================
-def render_header():
-    """Render the header navigation bar."""
+
+def render_top_navbar():
+    """Render modern top navigation bar like a website."""
     st.markdown("""
-    <style>
-    .header-nav {
-        background: linear-gradient(90deg, #2c5530, #4a7c59);
-        padding: 1rem 2rem;
-        margin: -1rem -1rem 2rem -1rem;
-        border-radius: 0 0 10px 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    .header-nav h1 {
-        color: white;
-        margin: 0;
-        font-size: 2rem;
-        text-align: center;
-        font-weight: 600;
-    }
-    .nav-subtitle {
-        color: #e8f5e8;
-        text-align: center;
-        margin-top: 0.5rem;
-        font-size: 1.1rem;
-    }
-    .nav-features {
-        display: flex;
-        justify-content: center;
-        gap: 2rem;
-        margin-top: 1rem;
-        flex-wrap: wrap;
-    }
-    .nav-feature {
-        color: #e8f5e8;
-        font-size: 0.9rem;
-        padding: 0.3rem 0.8rem;
-        background: rgba(255,255,255,0.1);
-        border-radius: 15px;
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-    @media (max-width: 768px) {
-        .header-nav h1 { font-size: 1.5rem; }
-        .nav-features { gap: 0.5rem; }
-        .nav-feature { font-size: 0.8rem; padding: 0.2rem 0.6rem; }
-    }
-    </style>
-    <div class="header-nav">
-        <h1>🏏 Cricket Cover Drive Analyzer</h1>
-        <div class="nav-subtitle">Real-Time Pose Analysis & Technique Evaluation</div>
-        <div class="nav-features">
-            <span class="nav-feature">📊 Full Video Processing</span>
-            <span class="nav-feature">🎯 Pose Estimation</span>
-            <span class="nav-feature">📈 Live Metrics</span>
-            <span class="nav-feature">🏆 Shot Evaluation</span>
-            <span class="nav-feature">📋 Detailed Reports</span>
+    <div class="top-navbar">
+        <div class="navbar-brand">
+            <h1>🏏 Cricket Cover Drive Analyzer</h1>
+        </div>
+        <div class="navbar-subtitle">
+            Advanced AI-Powered Cricket Technique Analysis Platform
+        </div>
+        <div class="navbar-features">
+            <span class="feature-badge">📊 Full Video Processing</span>
+            <span class="feature-badge">🎯 Real-Time Pose Analysis</span>
+            <span class="feature-badge">📈 Live Performance Metrics</span>
+            <span class="feature-badge">🏆 Expert Shot Evaluation</span>
+            <span class="feature-badge">📋 Comprehensive Reports</span>
+            <span class="feature-badge">⚡ 10+ FPS Processing</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def render_features_showcase():
+    """Render horizontal features showcase section."""
+    st.markdown("""
+    <div class="features-showcase">
+        <h2 style="color: #2E8B57; text-align: center; margin-bottom: 1rem; font-size: 2rem;">
+            🏏 Cricket Analysis Platform Features
+        </h2>
+        <div class="features-grid">
+            <div class="feature-card hover-lift">
+                <span class="feature-icon">📹</span>
+                <div class="feature-title">Video Analysis Engine</div>
+                <div class="feature-description">
+                    Advanced computer vision processing with MediaPipe pose estimation. 
+                    Real-time analysis at 10+ FPS with adaptive quality optimization.
+                </div>
+            </div>
+            <div class="feature-card hover-lift">
+                <span class="feature-icon">🎯</span>
+                <div class="feature-title">Cricket Technique Scoring</div>
+                <div class="feature-description">
+                    Professional evaluation of footwork, head position, swing control, 
+                    balance, and follow-through with detailed scoring system.
+                </div>
+            </div>
+            <div class="feature-card hover-lift">
+                <span class="feature-icon">📊</span>
+                <div class="feature-title">Live Performance Feedback</div>
+                <div class="feature-description">
+                    Instant cricket coaching feedback: elbow elevation, head-knee alignment, 
+                    spine lean, foot direction, and weight transfer analysis.
+                </div>
+            </div>
+            <div class="feature-card hover-lift">
+                <span class="feature-icon">🏏</span>
+                <div class="feature-title">Bat Tracking & Swing Analysis</div>
+                <div class="feature-description">
+                    Color-based bat detection with swing path tracking, straightness 
+                    assessment, and impact angle calculation for complete shot analysis.
+                </div>
+            </div>
+            <div class="feature-card hover-lift">
+                <span class="feature-icon">📈</span>
+                <div class="feature-title">Phase Detection System</div>
+                <div class="feature-description">
+                    Automatic identification of cricket shot phases: stance, stride, 
+                    downswing, impact, and follow-through with timing analysis.
+                </div>
+            </div>
+            <div class="feature-card hover-lift">
+                <span class="feature-icon">📋</span>
+                <div class="feature-title">Professional Reports</div>
+                <div class="feature-description">
+                    Comprehensive HTML and PDF reports with charts, training recommendations, 
+                    and detailed technique breakdown for improvement.
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+def render_analysis_scope():
+    """Render cricket analysis scope in modern expandable format."""
+    st.markdown("""
+    <div class="features-showcase">
+        <div class="expandable-header">
+            🏏 Complete Cricket Analysis Scope & Technical Capabilities
+        </div>
+        <div class="expandable-content">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📍</span>
+                    <div class="feature-title">Head Position Analysis</div>
+                    <div class="feature-description">
+                        • Steady head tracking throughout shot execution<br>
+                        • Head-over-knee alignment analysis for balance<br>
+                        • Real-time head position feedback
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🏃</span>
+                    <div class="feature-title">Body Alignment Detection</div>
+                    <div class="feature-description">
+                        • Shoulder tilt and hip alignment measurement<br>
+                        • Spine lean vs. vertical analysis<br>
+                        • Balance and weight distribution tracking
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">💪</span>
+                    <div class="feature-title">Arm Mechanics Evaluation</div>
+                    <div class="feature-description">
+                        • Front elbow angle calculation (shoulder–elbow–wrist)<br>
+                        • Front elbow elevation detection<br>
+                        • Wrist position and velocity tracking
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🦵</span>
+                    <div class="feature-title">Leg Position Analysis</div>
+                    <div class="feature-description">
+                        • Front knee bend and alignment measurement<br>
+                        • Front foot direction vs. crease analysis<br>
+                        • Back foot stability and foot spread calculation
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <div class="feature-title">Real-Time Performance</div>
+                    <div class="feature-description">
+                        • Achieves ≥10 FPS end-to-end processing on CPU<br>
+                        • Auto-optimization reduces quality if FPS drops<br>
+                        • Adaptive frame skipping for speed maintenance
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🏏</span>
+                    <div class="feature-title">Advanced Bat Detection</div>
+                    <div class="feature-description">
+                        • Color and shape-based bat detection system<br>
+                        • Swing path tracking and straightness analysis<br>
+                        • Impact angle calculation and quality assessment
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -93,44 +214,20 @@ def render_header():
 # Footer Component
 # ===============================
 def render_footer():
-    """Render the footer with developer info."""
+    """Render modern website footer."""
     st.markdown("""
-    <style>
-    .footer-container {
-        margin-top: 3rem;
-        padding: 2rem 0 1rem 0;
-        border-top: 2px solid #2c5530;
-        background: linear-gradient(135deg, #f8fff8, #e8f5e8);
-        text-align: center;
-        border-radius: 10px 10px 0 0;
-    }
-    .footer-main {
-        font-size: 1.1rem;
-        color: #2c5530;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-    .footer-dev {
-        font-size: 1rem;
-        color: #4a7c59;
-        margin: 0.3rem 0;
-    }
-    .footer-date {
-        font-size: 0.9rem;
-        color: #666;
-        font-style: italic;
-    }
-    .footer-tech {
-        margin-top: 1rem;
-        font-size: 0.85rem;
-        color: #777;
-    }
-    </style>
-    <div class="footer-container">
-        <div class="footer-main">🏏 Cricket Cover Drive Analyzer</div>
-        <div class="footer-dev">Built by <strong>Vivek Kumar Yadav</strong></div>
-        <div class="footer-date">17/08/2025</div>
-        <div class="footer-tech">Powered by MediaPipe, OpenCV & Streamlit</div>
+    <div class="footer-section">
+        <div class="footer-title">🏏 Cricket Cover Drive Analyzer</div>
+        <div class="footer-subtitle">Built by <strong>Vivek Kumar Yadav</strong></div>
+        <div class="footer-links" style="margin: 1rem 0; font-size: 1.1rem;">
+            <a href="https://github.com/Lnxtanx" target="_blank" style="color: #2E8B57; text-decoration: none; margin-right: 2rem;">
+                🔗 GitHub: github.com/Lnxtanx
+            </a>
+            <a href="https://linkedin.com/in/vivek-kumar1387" target="_blank" style="color: #2E8B57; text-decoration: none;">
+                💼 LinkedIn: linkedin.com/in/vivek-kumar1387
+            </a>
+        </div>
+        <div class="footer-tech">Powered by MediaPipe, OpenCV, Streamlit & Advanced AI</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -282,377 +379,227 @@ def analyze_video_streamlit(video_path, output_dir="output"):
 # Main Streamlit App
 # ===============================
 def main():
-    # Render header navigation
-    render_header()
+    # Render modern top navigation
+    render_top_navbar()
     
-    # Main content area - remove sample data and posture detection
-    col1, col2 = st.columns([1, 1])
+    # Render features showcase
+    render_features_showcase()
     
-    with col1:
-        st.header("📤 Upload Video")
+    # Render analysis scope
+    render_analysis_scope()
+    
+    # Main content container
+    st.markdown('<div class="main-container">', unsafe_allow_html=True)
+    
+    # Two-column layout for upload and results
+    st.markdown('<div class="content-grid">', unsafe_allow_html=True)
+    
+    # Left Column - Video Upload Section
+    st.markdown('<div class="upload-section">', unsafe_allow_html=True)
+    st.markdown('<h2>📤 Upload Cricket Video</h2>', unsafe_allow_html=True)
+    
+    uploaded_file = st.file_uploader(
+        "Choose a cricket cover drive video", 
+        type=['mp4', 'avi', 'mov', 'mkv'],
+        help="Upload a cricket cover drive video for comprehensive technique analysis"
+    )
+    
+    if uploaded_file is not None:
+        # Video frame styling
+        st.markdown('<div class="video-frame">', unsafe_allow_html=True)
+        st.video(uploaded_file, format="video/mp4", start_time=0)
+        st.markdown('</div>', unsafe_allow_html=True)
         
-        # Requirements display
-        with st.expander("🏏 Cricket Analysis Scope & Features", expanded=False):
-            st.markdown("""
-            **Core Cricket Detections (Per Frame)**
-            
-            📍 **Head Position**
-            - Steady head tracking throughout shot
-            - Head-over-knee alignment analysis
-            
-            🏃 **Body Alignment** 
-            - Shoulder tilt and hip alignment
-            - Spine lean vs. vertical analysis
-            - Balance and weight distribution
-            
-            💪 **Arm Mechanics**
-            - Front elbow angle (shoulder–elbow–wrist)
-            - Front elbow elevation detection
-            - Wrist position and velocity tracking
-            
-            🦵 **Leg Position**
-            - Front knee bend and alignment
-            - Front foot direction vs. crease
-            - Back foot stability analysis
-            - Foot spread measurement
-            
-            **🎯 Real-Time Performance Target**
-            - Achieves ≥10 FPS end-to-end processing on CPU
-            - Auto-optimization: reduces quality if FPS drops
-            - Performance logging with FPS monitoring
-            - Adaptive frame skipping for speed
-            
-            **🏏 Basic Bat Detection & Tracking**
-            - Color and shape-based bat detection
-            - Swing path tracking and analysis
-            - Swing straightness assessment
-            - Impact angle calculation
-            - Bat detection rate monitoring
-            
-            **Live Cricket Feedback**
-            - ✅ Good elbow elevation / ❌ Low elbow
-            - ✅ Head positioned / ❌ Head not over knee  
-            - ✅ Good balance / ❌ Too much lean
-            - ✅ Knee aligned / ❌ Knee alignment
-            - ✅ Foot positioned / ❌ Foot direction
-            - 🏏 BAT DETECTED indicator
-            
-            **Final Cricket Evaluation**
-            - **Footwork** (stride, placement, direction) - Score 1-10
-            - **Head Position** (steady, aligned) - Score 1-10
-            - **Swing Control** (elbow elevation, consistency) - Score 1-10
-            - **Balance** (spine lean, weight transfer) - Score 1-10
-            - **Follow-through** (completion, finishing) - Score 1-10
-            
-            **Advanced Features**
-            - Phase detection: Stance → Stride → Downswing → Impact → Follow-through
-            - Ball contact moment detection from wrist velocity
-            - Movement smoothness and consistency analysis
-            - Skill grading: Beginner / Intermediate / Advanced
-            - Cricket technique breakdown with specific feedback
-            - Real-time performance optimization
-            """)
+        # File details in card format
+        st.markdown(f"""
+        <div class="feature-card" style="margin: 1rem 0;">
+            <div class="feature-title">📁 File Information</div>
+            <div class="feature-description">
+                <strong>Filename:</strong> {uploaded_file.name}<br>
+                <strong>File size:</strong> {uploaded_file.size / (1024*1024):.2f} MB<br>
+                <strong>Ready for analysis:</strong> ✅
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         
-        uploaded_file = st.file_uploader(
-            "Choose a cricket cover drive video", 
-            type=['mp4', 'avi', 'mov', 'mkv'],
-            help="Upload a cricket cover drive video for comprehensive technique analysis"
-        )
+        # Analyze button with modern styling
+        if st.button("🔄 Analyze Video", type="primary", use_container_width=True):
+            with st.spinner("🚀 Analyzing video... Processing all frames with real-time metrics..."):
+                evaluation, video_path, json_path, report_paths = analyze_uploaded_video(uploaded_file)
+                
+                if evaluation:
+                    # Store results in session state
+                    st.session_state.evaluation = evaluation
+                    st.session_state.video_path = video_path
+                    st.session_state.json_path = json_path
+                    st.session_state.report_paths = report_paths
+                    
+                    # Show performance stats if available
+                    if 'performance_stats' in evaluation:
+                        perf = evaluation['performance_stats']
+                        st.success(f"✅ Analysis complete! Processed at {perf.get('avg_fps', 0):.1f} FPS")
+                        if perf.get('avg_fps', 0) >= 10:
+                            st.balloons()  # Celebrate good performance!
+                    else:
+                        st.success("✅ Analysis complete!")
+                    
+                    st.rerun()
+    
+    st.markdown('</div>', unsafe_allow_html=True)  # Close upload-section
+    
+    # Right Column - Results Section
+    st.markdown('<div class="results-section">', unsafe_allow_html=True)
+    st.markdown('<h2>📈 Analysis Results & Downloads</h2>', unsafe_allow_html=True)
+    
+    # Display results if available
+    if hasattr(st.session_state, 'evaluation') and st.session_state.evaluation:
+        evaluation = st.session_state.evaluation
         
-        if uploaded_file is not None:
-            # Make video container smaller with custom width
-            st.video(uploaded_file, format="video/mp4", start_time=0)
-            
-            # Add CSS to make video smaller
-            st.markdown("""
-            <style>
-            .stVideo > div {
-                max-width: 400px !important;
-                margin: 0 auto;
-            }
-            .stVideo video {
-                max-width: 100% !important;
-                height: auto !important;
-                max-height: 300px !important;
-            }
-            </style>
+        # Overall Score Display
+        overall_score = evaluation.get('overall_score', np.mean(list(evaluation["scores"].values())))
+        st.markdown(f"""
+        <div class="overall-score slide-in-up">
+            <span class="overall-score-value">{overall_score:.1f}</span>
+            <div class="overall-score-label">Overall Cricket Technique Score</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: {(overall_score/10)*100}%"></div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Technique Scores Grid
+        st.markdown('<h3 style="color: #2E8B57; margin: 1.5rem 0 1rem 0;">🎯 Technique Analysis Breakdown</h3>', unsafe_allow_html=True)
+        st.markdown('<div class="score-grid">', unsafe_allow_html=True)
+        
+        for metric, score in evaluation["scores"].items():
+            score_class = "score-excellent" if score >= 8 else "score-good" if score >= 6 else "score-poor"
+            st.markdown(f"""
+            <div class="score-card hover-lift">
+                <span class="score-value {score_class}">{score}</span>
+                <div class="score-label">{metric}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)  # Close score-grid
+        
+        # Enhanced Mode Features
+        if ENHANCED_MODE and 'skill_grade' in evaluation:
+            # Skill grade display
+            grade = evaluation.get('skill_grade', 'Beginner')
+            grade_colors = {'Beginner': '🔵', 'Intermediate': '🟡', 'Advanced': '🟢'}
+            st.markdown(f"""
+            <div class="feature-card" style="text-align: center; margin: 1.5rem 0;">
+                <div class="feature-title">{grade_colors.get(grade, '⚪')} Skill Level Assessment</div>
+                <div class="feature-description" style="font-size: 1.2rem; font-weight: 600; color: #2E8B57;">
+                    {grade}
+                </div>
+            </div>
             """, unsafe_allow_html=True)
             
-            # Show file details
-            file_details = {
-                "Filename": uploaded_file.name,
-                "File size": f"{uploaded_file.size / (1024*1024):.2f} MB"
-            }
-            st.json(file_details)
-            
-            # Analyze button
-            if st.button("🔄 Analyze Video", type="primary"):
-                with st.spinner("Analyzing video... Processing all frames with real-time metrics..."):
-                    evaluation, video_path, json_path, report_paths = analyze_uploaded_video(uploaded_file)
-                    
-                    if evaluation:
-                        # Store results in session state
-                        st.session_state.evaluation = evaluation
-                        st.session_state.video_path = video_path
-                        st.session_state.json_path = json_path
-                        st.session_state.report_paths = report_paths
-                        
-                        # Show performance stats if available
-                        if 'performance_stats' in evaluation:
-                            perf = evaluation['performance_stats']
-                            st.success(f"✅ Analysis complete! Processed at {perf.get('avg_fps', 0):.1f} FPS")
-                            if perf.get('avg_fps', 0) >= 10:
-                                st.balloons()  # Celebrate good performance!
-                        else:
-                            st.success("✅ Analysis complete!")
-                        
-                        st.rerun()
-
-    with col2:
-        st.header("📈 Results & Downloads")
-        
-        # Display results if available
-        if hasattr(st.session_state, 'evaluation') and st.session_state.evaluation:
-            evaluation = st.session_state.evaluation
-            
-            # Enhanced mode features
-            if ENHANCED_MODE and 'skill_grade' in evaluation:
-                # Skill grade display
-                grade = evaluation.get('skill_grade', 'Beginner')
-                grade_colors = {'Beginner': '🔵', 'Intermediate': '🟡', 'Advanced': '🟢'}
-                st.subheader(f"{grade_colors.get(grade, '⚪')} Skill Level: {grade}")
+            # Performance metrics
+            if 'performance_stats' in evaluation:
+                perf = evaluation['performance_stats']
+                st.markdown('<h3 style="color: #FF6B35; margin: 1.5rem 0 1rem 0;">⚡ Real-Time Performance Metrics</h3>', unsafe_allow_html=True)
+                st.markdown('<div class="metrics-grid">', unsafe_allow_html=True)
                 
-                # Cricket-specific analysis
-                if 'cricket_analysis' in evaluation:
-                    cricket = evaluation['cricket_analysis']
-                    
-                    # Technique breakdown
-                    st.subheader("🏏 Cricket Technique Analysis")
-                    technique_cols = st.columns(3)
-                    
-                    with technique_cols[0]:
-                        st.info(f"**Front Elbow:** {cricket['technique_breakdown']['front_elbow_analysis']}")
-                        st.info(f"**Head-Knee:** {cricket['technique_breakdown']['head_knee_alignment']}")
-                    
-                    with technique_cols[1]:
-                        st.info(f"**Spine Lean:** {cricket['technique_breakdown']['spine_lean_analysis']}")
-                        st.info(f"**Foot Direction:** {cricket['technique_breakdown']['foot_direction']}")
-                    
-                    with technique_cols[2]:
-                        st.info(f"**Weight Transfer:** {cricket['technique_breakdown']['weight_transfer']}")
-                        st.info(f"**Contact Quality:** {cricket['contact_quality']}")
+                fps_achieved = perf.get('avg_fps', 0)
+                fps_status = "✅" if fps_achieved >= 10 else "⚠️" if fps_achieved >= 8 else "❌"
                 
-                # Performance stats with FPS target tracking
-                if 'performance_stats' in evaluation:
-                    perf = evaluation['performance_stats']
-                    st.subheader("⚡ Real-Time Performance Target (≥10 FPS)")
-                    perf_cols = st.columns(4)
-                    with perf_cols[0]:
-                        fps_achieved = perf.get('avg_fps', 0)
-                        fps_target = 10.0
-                        fps_status = "✅" if fps_achieved >= fps_target else "⚠️" if fps_achieved >= fps_target * 0.8 else "❌"
-                        st.metric("Processing FPS", f"{fps_achieved:.1f} {fps_status}", delta=f"Target: {fps_target}")
-                    with perf_cols[1]:
-                        st.metric("Total Frames", perf.get('total_frames', 0))
-                    with perf_cols[2]:
-                        st.metric("Processing Time", f"{perf.get('total_processing_time', 0):.1f}s")
-                    with perf_cols[3]:
-                        opt_level = perf.get('optimization_level', 0)
-                        opt_text = ["Full Quality", "Medium Speed", "High Speed"][min(opt_level, 2)]
-                        st.metric("Auto Optimization", opt_text)
+                metrics_data = [
+                    (f"{fps_achieved:.1f} {fps_status}", "Processing FPS"),
+                    (perf.get('total_frames', 0), "Total Frames"),
+                    (f"{perf.get('total_processing_time', 0):.1f}s", "Processing Time"),
+                    (["Full Quality", "Medium Speed", "High Speed"][min(perf.get('optimization_level', 0), 2)], "Auto Optimization")
+                ]
                 
-                # Bat tracking and swing analysis
-                if 'performance_stats' in evaluation and 'swing_analysis' in evaluation['performance_stats']:
-                    swing = evaluation['performance_stats']['swing_analysis']
-                    st.subheader("🏏 Bat Detection & Swing Path Analysis")
-                    
-                    swing_cols = st.columns(4)
-                    with swing_cols[0]:
-                        straightness = swing.get('swing_straightness', 0)
-                        st.metric("Swing Straightness", f"{straightness*100:.0f}%")
-                    with swing_cols[1]:
-                        impact_angle = swing.get('impact_angle', 0)
-                        st.metric("Impact Angle", f"{impact_angle:.1f}°")
-                    with swing_cols[2]:
-                        detections = swing.get('bat_detections', 0)
-                        total_frames = perf.get('total_frames', 1)
-                        detection_rate = (detections / total_frames) * 100
-                        st.metric("Bat Detection Rate", f"{detection_rate:.0f}%")
-                    with swing_cols[3]:
-                        path_length = swing.get('swing_path_length', 0)
-                        st.metric("Swing Tracking", f"{path_length} frames")
-                    
-                    # Swing quality assessment
-                    quality = swing.get('swing_quality', 'unknown')
-                    quality_colors = {
-                        'excellent': '🟢 Excellent - Very straight swing path',
-                        'good': '🟡 Good - Minor deviations in swing',
-                        'fair': '🟠 Fair - Some swing inconsistencies', 
-                        'poor': '🔴 Poor - Irregular swing path',
-                        'insufficient_data': '⚪ Insufficient data for analysis'
-                    }
-                    quality_message = quality_colors.get(quality, '⚪ Unknown swing quality')
-                    st.info(f"**Swing Path Quality:** {quality_message}")
-                
-                # Phase analysis
-                if 'phases' in evaluation and evaluation['phases']:
-                    st.subheader("📊 Shot Phase Analysis")
-                    phase_cols = st.columns(min(len(evaluation['phases']), 5))
-                    for i, phase in enumerate(evaluation['phases'][:5]):  # Limit to 5 phases
-                        with phase_cols[i]:
-                            st.info(f"**{phase['name'].title().replace('_', ' ')}**\n{phase['duration']} frames")
-                
-                # Contact moment detection
-                if 'contact_moment' in evaluation and evaluation['contact_moment']:
-                    contact = evaluation['contact_moment']
-                    st.subheader("⚡ Ball Contact Detection")
-                    contact_cols = st.columns(3)
-                    with contact_cols[0]:
-                        st.metric("Frame", contact['frame_number'])
-                    with contact_cols[1]:
-                        st.metric("Confidence", f"{contact['confidence']*100:.0f}%")
-                    with contact_cols[2]:
-                        st.metric("Wrist Velocity", f"{contact['wrist_velocity']:.1f}")
-                
-                # Smoothness metrics
-                if 'smoothness_metrics' in evaluation:
-                    smooth = evaluation['smoothness_metrics']
-                    st.subheader("📈 Movement Smoothness")
-                    smooth_cols = st.columns(2)
-                    with smooth_cols[0]:
-                        st.metric("Smoothness Score", f"{smooth.get('smoothness_score', 0)*100:.0f}%")
-                    with smooth_cols[1]:
-                        st.metric("Consistency Score", f"{smooth.get('consistency_score', 0)*100:.0f}%")
-            
-            # Scores display
-            st.subheader("🎯 Technique Scores (1-10)")
-            
-            # Create metrics columns
-            score_cols = st.columns(len(evaluation["scores"]))
-            for i, (metric, score) in enumerate(evaluation["scores"].items()):
-                with score_cols[i]:
-                    # Color-code scores
-                    if score >= 8:
-                        st.metric(metric, score, delta="Excellent", delta_color="normal")
-                    elif score >= 6:
-                        st.metric(metric, score, delta="Good", delta_color="normal")
-                    else:
-                        st.metric(metric, score, delta="Needs work", delta_color="inverse")
-            
-            # Overall score
-            overall_score = evaluation.get('overall_score', np.mean(list(evaluation["scores"].values())))
-            st.subheader(f"🏆 Overall Score: {overall_score:.1f}/10")
-            
-            # Progress bar for overall score
-            st.progress(overall_score / 10)
-            
-            # Feedback section
-            st.subheader("💡 Detailed Feedback")
-            for metric, feedback in evaluation["feedback"].items():
-                if "Good" in feedback or "steady" in feedback or "Controlled" in feedback or "Balanced" in feedback or "Smooth" in feedback:
-                    st.success(f"**{metric}**: {feedback}")
-                else:
-                    st.warning(f"**{metric}**: {feedback}")
-            
-            # Results section with annotated video, JSON preview, and PDF report
-            st.subheader("📋 Complete Analysis Results")
-            
-            # Three columns for different outputs
-            result_cols = st.columns(3)
-            
-            with result_cols[0]:
-                st.markdown("**📹 Annotated Video**")
-                if hasattr(st.session_state, 'video_path') and os.path.exists(st.session_state.video_path):
-                    # Make annotated video smaller
-                    st.video(st.session_state.video_path, format="video/mp4", start_time=0)
-                    
-                    # Add CSS to make annotated video smaller  
-                    st.markdown("""
-                    <style>
-                    .stVideo > div {
-                        max-width: 350px !important;
-                        margin: 0 auto;
-                    }
-                    .stVideo video {
-                        max-width: 100% !important;
-                        height: auto !important;
-                        max-height: 250px !important;
-                    }
-                    </style>
+                for value, label in metrics_data:
+                    st.markdown(f"""
+                    <div class="metric-card hover-lift">
+                        <span class="metric-value">{value}</span>
+                        <div class="metric-label">{label}</div>
+                    </div>
                     """, unsafe_allow_html=True)
-                    
-                    # Download link for video
-                    video_download = get_download_link(st.session_state.video_path, "📥 Download Annotated Video")
-                    st.markdown(video_download, unsafe_allow_html=True)
-                else:
-                    st.info("Annotated video will appear here after analysis")
-            
-            with result_cols[1]:
-                st.markdown("**📊 Analysis Data (JSON)**")
-                if hasattr(st.session_state, 'json_path') and os.path.exists(st.session_state.json_path):
-                    with open(st.session_state.json_path, 'r') as f:
-                        json_data = json.load(f)
-                    
-                    # Show JSON preview with expandable sections
-                    with st.expander("📋 View JSON Preview", expanded=False):
-                        st.json(json_data)
-                    
-                    # Summary of JSON content
-                    st.write(f"**Frames Analyzed:** {json_data.get('performance_stats', {}).get('total_frames', 'N/A')}")
-                    st.write(f"**Phases Detected:** {len(json_data.get('phases', []))}")
-                    st.write(f"**Overall Score:** {json_data.get('overall_score', 'N/A'):.1f}/10")
-                    
-                    # Download link for JSON
-                    json_download = get_download_link(st.session_state.json_path, "📥 Download JSON Report")
-                    st.markdown(json_download, unsafe_allow_html=True)
-                else:
-                    st.info("JSON analysis data will appear here after processing")
-            
-            with result_cols[2]:
-                st.markdown("**📄 Comprehensive Report**")
-                if ENHANCED_MODE and hasattr(st.session_state, 'report_paths'):
-                    report_paths = st.session_state.report_paths
-                    if 'html' in report_paths and os.path.exists(report_paths['html']):
-                        st.write("**HTML Report Available**")
-                        st.write("✅ Complete analysis with charts")
-                        st.write("✅ Training recommendations")
-                        st.write("✅ Performance comparisons")
-                        
-                        # Download link for HTML report
-                        html_download = get_download_link(report_paths['html'], "📊 Download HTML Report")
-                        st.markdown(html_download, unsafe_allow_html=True)
-                        
-                        # PDF download if available
-                        if 'pdf' in report_paths and os.path.exists(report_paths['pdf']):
-                            pdf_download = get_download_link(report_paths['pdf'], "📄 Download PDF Report")
-                            st.markdown(pdf_download, unsafe_allow_html=True)
-                    else:
-                        st.info("Comprehensive report will be generated after analysis")
-                else:
-                    st.info("Upgrade to enhanced mode for detailed reports")
+                
+                st.markdown('</div>', unsafe_allow_html=True)  # Close metrics-grid
         
-        else:
-            st.info("Upload and analyze a video to see results here.")
-            
-            # Show requirement summary instead of sample data
-            st.subheader("🏏 Cricket Analysis Features")
-            
-            requirements = [
-                ("📹 Annotated Video", "Cricket shot with pose overlays and real-time technique feedback"),
-                ("📊 JSON Analysis", "Complete frame-by-frame cricket metrics and evaluation scores"),
-                ("📄 Comprehensive Report", "Detailed cricket technique report with training recommendations"),
-                ("⚡ Live Cricket Feedback", "Real-time cues: ✅ Good elbow elevation ❌ Head not over knee"),
-                ("🎯 Cricket Evaluation", "Scores for footwork, head position, swing control, balance, follow-through"),
-                ("📈 Phase Analysis", "Cricket shot breakdown: stance, stride, downswing, impact, follow-through"),
-                ("🏏 Technique Breakdown", "Front elbow analysis, spine lean, head-knee alignment, foot direction"),
-                ("⚡ Contact Detection", "Ball impact moment from wrist velocity analysis"),
-                ("📊 Movement Analysis", "Smoothness and consistency metrics for cricket technique")
-            ]
-            
-            for title, description in requirements:
-                with st.expander(title, expanded=False):
-                    st.write(description)
-
+        # Feedback Section
+        st.markdown('<h3 style="color: #2E8B57; margin: 1.5rem 0 1rem 0;">💡 Expert Coaching Feedback</h3>', unsafe_allow_html=True)
+        st.markdown('<div class="feedback-grid">', unsafe_allow_html=True)
+        
+        for metric, feedback in evaluation["feedback"].items():
+            feedback_class = "feedback-positive" if any(word in feedback for word in ["Good", "steady", "Controlled", "Balanced", "Smooth"]) else "feedback-warning"
+            st.markdown(f"""
+            <div class="feedback-card {feedback_class}">
+                <div class="feedback-title">{metric}</div>
+                <div class="feedback-text">{feedback}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)  # Close feedback-grid
+        
+        # Download Section
+        st.markdown('<h3 style="color: #FF6B35; margin: 1.5rem 0 1rem 0;">📥 Download Analysis Results</h3>', unsafe_allow_html=True)
+        st.markdown('<div class="download-section">', unsafe_allow_html=True)
+        
+        # Annotated Video Download
+        if hasattr(st.session_state, 'video_path') and os.path.exists(st.session_state.video_path):
+            video_download = get_download_link(st.session_state.video_path, "Download Video")
+            st.markdown(f"""
+            <div class="download-card hover-lift">
+                <div class="download-icon">📹</div>
+                <div class="download-title">Annotated Video</div>
+                <div class="download-description">Cricket shot with pose overlays and technique feedback</div>
+                {video_download}
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # JSON Analysis Download
+        if hasattr(st.session_state, 'json_path') and os.path.exists(st.session_state.json_path):
+            json_download = get_download_link(st.session_state.json_path, "Download JSON")
+            st.markdown(f"""
+            <div class="download-card hover-lift">
+                <div class="download-icon">📊</div>
+                <div class="download-title">Analysis Data</div>
+                <div class="download-description">Complete frame-by-frame cricket metrics and scores</div>
+                {json_download}
+            </div>
+            """, unsafe_allow_html=True)
+        
+        # Report Download
+        if ENHANCED_MODE and hasattr(st.session_state, 'report_paths'):
+            report_paths = st.session_state.report_paths
+            if 'html' in report_paths and os.path.exists(report_paths['html']):
+                html_download = get_download_link(report_paths['html'], "Download Report")
+                st.markdown(f"""
+                <div class="download-card hover-lift">
+                    <div class="download-icon">📄</div>
+                    <div class="download-title">Comprehensive Report</div>
+                    <div class="download-description">Detailed analysis with charts and recommendations</div>
+                    {html_download}
+                </div>
+                """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)  # Close download-section
+        
+    else:
+        # Welcome message when no analysis available
+        st.markdown("""
+        <div class="feature-card" style="text-align: center; padding: 3rem 2rem;">
+            <span class="feature-icon" style="font-size: 4rem;">🏏</span>
+            <div class="feature-title" style="font-size: 1.5rem; margin: 1rem 0;">
+                Welcome to Cricket Cover Drive Analyzer
+            </div>
+            <div class="feature-description" style="font-size: 1.1rem;">
+                Upload a cricket cover drive video to start your comprehensive technique analysis.
+                Our AI-powered system will provide real-time feedback, scoring, and professional coaching insights.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)  # Close results-section
+    st.markdown('</div>', unsafe_allow_html=True)  # Close content-grid
+    st.markdown('</div>', unsafe_allow_html=True)  # Close main-container
+    
     # Render footer
     render_footer()
 
